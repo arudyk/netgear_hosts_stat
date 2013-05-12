@@ -1,7 +1,8 @@
 Router-Host-Check
 =================
 
-Allows a user to see the list of hosts connected to his/her Netgear router.
+Allows a user to see the list of hosts connected to his/her Netgear router
+using the terminal.
 
 Bugs:
 - Authenticates after second try on some routers.
