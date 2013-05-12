@@ -61,7 +61,7 @@ sub parse_hosts {
     for(my $i = 0; $i < $#table_items; $i += 3) {
         for (my $j = 0; $j < 3; $j++) {
             print $table_items[$i+$j]->as_text;
-            my $num_space = 16 - length($table_items[$i+$j]->as_text);
+            my $num_space = 22 - length($table_items[$i+$j]->as_text);
             print " " x $num_space;
         }
         print "\n";
