@@ -5,3 +5,4 @@ apt-get install libterm-readkey-perl libwww-mechanize-perl
 echo [+] Copying executable
 cp netgear_host_check /usr/bin
 echo [+] Installation complete!
+echo Run with: bash-prompt~$ netgear_host_check
