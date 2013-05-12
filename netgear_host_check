@@ -1,5 +1,16 @@
 #!/usr/bin/perl -w
 
+#
+# author:  Andriy Rudyk (arudyk.dev@gmail.com)
+# date:    12.05.2013
+# version: 1.0
+#
+# netgear_host_check <ip_address> <username>
+#
+# Shows all the hosts connected to your NETGEAR router.
+# Tested on NETGEAR WNDR3400v2
+#
+
 use strict;
 use warnings;
 
