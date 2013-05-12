@@ -2,15 +2,16 @@
 
 echo [-] Checking distribution
 distro=`lsb_release -si`
-if [ $(distro) == Ubuntu ]
+if [ "$distro" == "Ubuntu" ]
 then
     echo [+] Ubuntu detected!
     echo [+] Installing dependencies...
     apt-get install libterm-readkey-perl libwww-mechanize-perl
     echo [+] Copying executable
-    cp netgear_host_check /usr/bin
+    cp netgearstat /usr/bin
     echo [+] Installation complete!
     echo Run with: bash-prompt~$ netgear_host_check
 else
     echo [-] This is not a ubuntu install, please install dependencies manually
+    echo -e "[-] Dependencies are: \n\t HTML::TreeBuilder \n\t Term::ReadKey \n\t WWW::Mechanize"
 fi
