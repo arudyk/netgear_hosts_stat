@@ -1,0 +1,96 @@
+#!/usr/bin/perl -w
+
+#
+# author:  Andriy Rudyk (arudyk.dev@gmail.com)
+# date:    12.05.2013
+# version: 1.0
+#
+# netgear_host_check <router_ip_address> <username>
+#
+# Shows all the hosts connected to your NETGEAR router.
+#
+
+use strict;
+use warnings;
+
+use HTML::TreeBuilder;
+use MIME::Base64;
+use Term::ReadKey;
+use WWW::Mechanize;
+
+# Set user agent to firefox.
+use constant USER_AGENT => "Mozzila/5.0";
+
+# Entry point to the application. Checks for appropriate arguments.
+sub main {
+    if ($#ARGV != 1) {
+        print "usage: $0 <router_ip_address> <username>\n";
+        exit;
+    }
+
+    my $address = shift(@ARGV);
+    my $username = shift(@ARGV);
+
+    print "Enter " . $username . "'s password: ";
+    ReadMode("noecho"); # don't echo password
+    chomp(my $pass = <STDIN>);
+    ReadMode(0);        # switch back to normal
+    print "\n";
+
+    my $page = login($address, $username, $pass);
+    parse_hosts($page);
+}
+
+#
+# Logs into the NETGEAR router using the paramets given.
+#
+# param $address  -> ip address of the router on the local network.
+# param $username -> username used to login into the router.
+# param $password -> password for the above user.
+#
+# returns $agent->content() -> the attached devies webpage.
+#
+sub login {
+    my ($address, $username, $password) = @_;
+    my $url = "http://$address/DEV_device.htm";
+    my $agent = WWW::Mechanize->new(agent => USER_AGENT);
+
+    my @args = (Authorization => "Basic " .
+        MIME::Base64::encode($username . ':' . $password));
+
+    my $response = $agent->get($url, @args);
+    $response->is_success or die $response->status_line;
+
+    return $agent->content();
+}
+
+#
+# Parses out the gived "attached devices page" and displays the hosts in
+# a readable format.
+#
+# param $_ -> attached devices page.
+#
+sub parse_hosts {
+    my $tree = HTML::TreeBuilder->new();
+    $tree->parse_content($_[0]);
+    my @table_items = $tree->look_down('_tag' => 'span', class => 'ttext');
+    # Goes thought a list of ip_address, hostname, MAC address.
+    for(my $i = 0; $i < $#table_items; $i += 3) {
+        # Goes though each set of info for each host, and prints it.
+        for (my $j = 0; $j < 3; $j++) {
+            my $info =  $table_items[$i+$j]->as_text;
+            if (length($table_items[$i+$j]->as_text) > 17) {
+                $info = substr $table_items[$i+$j]->as_text, 0, 14;
+                print $info = $info . "...";
+            } else {
+                print $info
+            }
+            my $num_space = 22 - length($info);
+            print " " x $num_space;
+        }
+        print "\n";
+    }
+}
+
+#Run main
+main();
