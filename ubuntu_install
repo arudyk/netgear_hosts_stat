@@ -1,8 +1,16 @@
 #!/bin/bash
 
-echo ""[+] Installing dependencies...
-apt-get install libterm-readkey-perl libwww-mechanize-perl
-echo [+] Copying executable
-cp netgear_host_check /usr/bin
-echo [+] Installation complete!
-echo Run with: bash-prompt~$ netgear_host_check
+echo [-] Checking distribution
+distro=`lsb_release -si`
+if [ $(distro) == Ubuntu ]
+then
+    echo [+] Ubuntu detected!
+    echo [+] Installing dependencies...
+    apt-get install libterm-readkey-perl libwww-mechanize-perl
+    echo [+] Copying executable
+    cp netgear_host_check /usr/bin
+    echo [+] Installation complete!
+    echo Run with: bash-prompt~$ netgear_host_check
+else
+    echo [-] This is not a ubuntu install, please install dependencies manually
+fi
