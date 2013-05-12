@@ -1,0 +1,56 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+
+use HTML::TreeBuilder;
+use MIME::Base64;
+use Term::ReadKey;
+use WWW::Mechanize;
+
+use constant USER_AGENT => "Mozzila/5.0";
+
+sub main {
+    if ($#ARGV != 1) {
+        print "usage: $0 <ip_address> <username>\n";
+        exit;
+    }
+
+    my $address = shift(@ARGV);
+    my $username = shift(@ARGV);
+    
+    print "Enter " . $username . "'s password: ";
+    ReadMode("noecho"); # don't echo password
+    chomp(my $pass = <STDIN>);
+    ReadMode(0);        # switch back to normal
+    print "\n";
+
+    my $page = login($address, $username, $pass);
+    parse_hosts($page);
+}
+
+sub login {
+    my ($address, $username, $password) = @_;
+    my $url = "http://$address/DEV_device.htm";
+    my $agent = WWW::Mechanize->new(agent => USER_AGENT);
+
+    my @args = (Authorization => "Basic " .
+        MIME::Base64::encode($username . ':' . $password));
+
+    my $response = $agent->get($url, @args);
+    $response->is_success or die $response->status_line;
+    
+    return $agent->content();
+}
+
+sub parse_hosts {
+    my $tree = HTML::TreeBuilder->new();
+    $tree->parse_content($_[0])
+    my @table_items = $tree->look_down('_tag' => 'span');
+    foreach (@table_items) {
+        print $_ . "\n";
+    }
+}
+
+#Run main
+main();
