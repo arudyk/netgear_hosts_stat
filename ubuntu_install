@@ -10,7 +10,7 @@ then
     echo [+] Copying executable
     cp netgearstat /usr/bin
     echo [+] Installation complete!
-    echo Run with: bash-prompt~$ netgear_host_check
+    echo Run with: bash-prompt~$ netgearstat <router_ip_address> <username>
 else
     echo [-] This is not a ubuntu install, please install dependencies manually
     echo -e "[-] Dependencies are: \n\t HTML::TreeBuilder \n\t Term::ReadKey \n\t WWW::Mechanize"
