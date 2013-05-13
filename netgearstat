@@ -19,7 +19,7 @@ use Term::ReadKey;
 use WWW::Mechanize;
 
 # Set user agent to firefox.
-use constant USER_AGENT => "Mozzila/5.0";
+use constant USER_AGENT => "Mozilla/5.0 (X11; Linux x86_64; rv:20.0) Gecko/20100101 Firefox/20.0";
 
 # Entry point to the application. Checks for appropriate arguments.
 sub main {
